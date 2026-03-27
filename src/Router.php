@@ -4,6 +4,7 @@ namespace App;
 
 use App\Controllers\ChatController;
 use App\Controllers\FilesController;
+use App\Controllers\ModelsController;
 use App\Controllers\VectorStoreController;
 
 class Router
@@ -28,6 +29,11 @@ class Router
 
         if (str_starts_with($path, '/v1/files')) {
             (new FilesController())->handle($path, $method);
+            return;
+        }
+
+        if (str_starts_with($path, '/v1/models')) {
+            (new ModelsController())->handle($path, $method);
             return;
         }
 

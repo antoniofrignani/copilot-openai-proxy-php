@@ -4,6 +4,7 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use RuntimeException;
 
 class CopilotClient
@@ -45,6 +46,36 @@ class CopilotClient
             'messages' => $messages,
             'stream' => true
         ], true);
+    }
+
+    public function models(): array
+    {
+        $paths = ['/v1/models', '/models'];
+        $lastError = null;
+
+        foreach ($paths as $path) {
+            try {
+                $res = $this->http->get($path, [
+                    'headers' => $this->headers(),
+                ]);
+
+                $data = json_decode((string) $res->getBody(), true);
+                if (is_array($data)) {
+                    return $data;
+                }
+            } catch (RequestException $e) {
+                $lastError = $e;
+            }
+        }
+
+        if ($lastError !== null) {
+            throw $lastError;
+        }
+
+        return [
+            'object' => 'list',
+            'data' => [],
+        ];
     }
 
     private function postChat(array $payload, bool $stream)
