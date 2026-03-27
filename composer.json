@@ -1,0 +1,21 @@
+{
+  "require": {
+    "guzzlehttp/guzzle": "^7.0",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "auth:copilot": [
+      "Composer\\Config::disableProcessTimeout",
+      "php bin/copilot-auth.php"
+    ],
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "php -S localhost:8080 -t public"
+    ]
+  }
+}
